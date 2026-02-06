@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天翼云电脑AI Cowork</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #eee; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; min-height: 100vh; }
+        header { text-align: center; padding: 15px 0; border-bottom: 1px solid #333; margin-bottom: 15px; }
+        h1 { font-size: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .status { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; font-size: 0.85rem; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #666; }
+        .status-dot.online { background: #4ade80; box-shadow: 0 0 10px #4ade80; }
+        .chat-container { background: #16162a; border-radius: 12px; padding: 15px; margin-bottom: 15px; min-height: 400px; max-height: 60vh; overflow-y: auto; }
+        .message { margin-bottom: 12px; padding: 12px; border-radius: 10px; max-width: 85%; }
+        .message.user { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-left: auto; }
+        .message.assistant { background: #2a2a4a; margin-right: auto; }
+        .message.system { background: transparent; margin: 10px auto; text-align: center; font-size: 0.85rem; color: #888; }
+        .message.error { background: #3a1a1a; border: 1px solid #ef4444; margin: 10px auto; }
+        .message-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.75rem; opacity: 0.7; }
+        .message-content { white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        .input-area { display: flex; gap: 10px; background: #16162a; padding: 12px; border-radius: 12px; }
+        textarea { flex: 1; background: #2a2a4a; border: 1px solid #444; border-radius: 8px; color: #eee; padding: 10px; resize: none; height: 50px; font-family: inherit; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        button { padding: 0 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; }
+        button:hover:not(:disabled) { transform: scale(1.02); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .loading { display: inline-block; width: 14px; height: 14px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .settings-bar { display: flex; gap: 10px; align-items: center; background: #16162a; padding: 10px 15px; border-radius: 10px; margin-bottom: 15px; }
+        .settings-bar label { font-size: 0.8rem; color: #888; }
+        .settings-bar select { background: #2a2a4a; border: 1px solid #444; border-radius: 6px; color: #eee; padding: 6px 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>天翼云电脑AI Cowork</h1>
+            <div class="status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">初始化中...</span>
+            </div>
+        </header>
+
+        <div class="settings-bar">
+            <label>Server:</label>
+            <input type="text" id="serverUrl" value="http://localhost:4096" style="width: 150px; background: #2a2a4a; border: 1px solid #444; border-radius: 6px; color: #eee; padding: 6px 10px;">
+            <button id="connectBtn" style="padding: 6px 16px;">连接</button>
+            <span style="flex:1;"></span>
+            <label>模型:</label>
+            <select id="modelSelect" style="width: 200px;"></select>
+            <button id="newSessionBtn" style="padding: 6px 16px; background: #444;">新建会话</button>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message system">点击"连接"按钮连接到 OpenCode 服务器</div>
+        </div>
+
+        <div class="input-area">
+            <textarea id="promptInput" placeholder="输入指令... (Enter 发送)" disabled></textarea>
+            <button id="sendBtn" disabled>发送</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createOpencodeClient } from "https://esm.sh/@opencode-ai/sdk@latest";
+
+        let client = null;
+        let currentSessionId = null;
+        let isConnected = false;
+        let isProcessing = false;
+
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const chatContainer = document.getElementById('chatContainer');
+        const promptInput = document.getElementById('promptInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const serverUrlInput = document.getElementById('serverUrl');
+        const connectBtn = document.getElementById('connectBtn');
+        const newSessionBtn = document.getElementById('newSessionBtn');
+        const modelSelect = document.getElementById('modelSelect');
+
+        serverUrlInput.value = localStorage.getItem('opencode_serverUrl') || 'http://localhost:4096';
+
+        async function connect() {
+            try {
+                setStatus('connecting');
+                addSystemMessage('正在连接...');
+
+                client = createOpencodeClient({
+                    baseUrl: serverUrlInput.value
+                });
+
+                // Get providers config
+                const configResult = await client.config.providers();
+                console.log('[DEBUG] Config result:', configResult);
+                console.log('[DEBUG] Config result keys:', Object.keys(configResult));
+
+                // The SDK wraps responses: { data: {...}, ... }
+                const config = configResult.data || configResult;
+                console.log('[DEBUG] Config data:', config);
+
+                // Update model list
+                updateModelList(config);
+
+                setStatus('online');
+                isConnected = true;
+                promptInput.disabled = false;
+                sendBtn.disabled = false;
+                connectBtn.textContent = '已连接';
+                connectBtn.disabled = true;
+                newSessionBtn.disabled = false;
+
+                localStorage.setItem('opencode_serverUrl', serverUrlInput.value);
+
+                // Try to restore previous session
+                const savedSessionId = localStorage.getItem('opencode_sessionId');
+                if (savedSessionId) {
+                    currentSessionId = savedSessionId;
+                    addSystemMessage('已连接，恢复会话 - ' + savedSessionId.slice(-8));
+                    await loadMessages();
+                } else {
+                    addSystemMessage('已连接，请新建会话');
+                }
+
+            } catch (error) {
+                console.error('[ERROR]', error);
+                setStatus('offline');
+                addSystemMessage('连接失败: ' + error.message);
+            }
+        }
+
+        function updateModelList(config) {
+            modelSelect.innerHTML = '';
+            console.log('[DEBUG] updateModelList input:', config);
+
+            // Group models by provider
+            const models = [];
+            const providers = config.providers || config.all || [];
+            console.log('[DEBUG] Providers:', providers);
+
+            providers.forEach(p => {
+                console.log('[DEBUG] Provider:', p.id || p.providerID, p);
+                const providerID = p.providerID || p.id;
+                const providerModels = p.models || {};
+                Object.entries(providerModels).forEach(([modelId, modelInfo]) => {
+                    models.push({
+                        value: `${providerID}:${modelId}`,
+                        label: `${providerID}:${modelId}`,
+                        cost: modelInfo.cost?.input || 0
+                    });
+                });
+            });
+
+            console.log('[DEBUG] All models:', models);
+
+            // Sort by cost (free models first)
+            models.sort((a, b) => a.cost - b.cost);
+
+            models.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m.value;
+                option.textContent = m.cost === 0 ? `${m.label} (免费)` : m.label;
+                modelSelect.appendChild(option);
+            });
+
+            console.log('[DEBUG] Model select options count:', modelSelect.options.length);
+
+            // Default to first free model (minimax-m2.1-free is preferred)
+            const minimaxModel = models.find(m => m.value.includes('minimax-m2.1-free'));
+            if (minimaxModel) {
+                modelSelect.value = minimaxModel.value;
+            } else {
+                const freeModel = models.find(m => m.cost === 0);
+                if (freeModel) {
+                    modelSelect.value = freeModel.value;
+                }
+            }
+        }
+
+        async function createSession() {
+            try {
+                addSystemMessage('正在创建会话...');
+
+                const session = await client.session.create({
+                    body: { title: 'Web Session ' + new Date().toLocaleTimeString() }
+                });
+
+                console.log('[DEBUG] Session created:', session);
+                currentSessionId = session.data?.id || session.id;
+                console.log('[DEBUG] Session ID:', currentSessionId);
+
+                if (!currentSessionId) {
+                    console.error('[ERROR] No session ID in response:', session);
+                    addSystemMessage('创建失败: 未能获取会话 ID');
+                    return;
+                }
+
+                localStorage.setItem('opencode_sessionId', currentSessionId);
+                chatContainer.innerHTML = '';
+                addSystemMessage('已创建会话 - ' + currentSessionId.slice(-8));
+
+                // Load any existing messages
+                await loadMessages();
+
+            } catch (error) {
+                console.error('[ERROR] Create session:', error);
+                addSystemMessage('创建失败: ' + error.message);
+            }
+        }
+
+        async function loadMessages() {
+            if (!currentSessionId || !client) return;
+
+            try {
+                const messages = await client.session.messages({
+                    path: { id: currentSessionId }
+                });
+
+                console.log('[DEBUG] Messages:', messages);
+
+                chatContainer.innerHTML = '';
+                if (messages.data && Array.isArray(messages.data)) {
+                    messages.data.forEach(msg => {
+                        const role = msg.info?.role || 'user';
+                        let content = '';
+                        if (msg.parts) {
+                            content = msg.parts
+                                .filter(p => p.type === 'text')
+                                .map(p => p.text)
+                                .join('\n');
+                        }
+                        if (content && role !== 'system') {
+                            addMessage(role, content, false);
+                        }
+                    });
+                }
+                scrollToBottom();
+            } catch (error) {
+                console.error('[ERROR] Load messages:', error);
+            }
+        }
+
+        async function sendPrompt() {
+            const text = promptInput.value.trim();
+            if (!text || !currentSessionId || isProcessing) return;
+
+            isProcessing = true;
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="loading"></span>';
+
+            addMessage('user', text);
+            promptInput.value = '';
+
+            try {
+                const [providerID, modelID] = modelSelect.value.split(':');
+                console.log('[DEBUG] Sending with model:', { providerID, modelID });
+
+                // Use session.prompt - this returns the AI response directly
+                const result = await client.session.prompt({
+                    path: { id: currentSessionId },
+                    body: {
+                        model: { providerID, modelID },
+                        parts: [{ type: 'text', text }]
+                    }
+                });
+
+                console.log('[DEBUG] Prompt result:', result);
+                console.log('[DEBUG] Result keys:', Object.keys(result));
+                console.log('[DEBUG] Result.data:', result.data);
+
+                // Extract response from result
+                let responseText = '';
+
+                // The SDK wraps responses: { data: {...}, response: {...}, request: {...} }
+                const messageObj = result.data || result;
+                console.log('[DEBUG] Message object:', messageObj);
+
+                if (messageObj.parts) {
+                    console.log('[DEBUG] Parts:', messageObj.parts);
+                    responseText = messageObj.parts
+                        .filter(p => p.type === 'text')
+                        .map(p => p.text)
+                        .join('\n');
+                    console.log('[DEBUG] Response text:', responseText);
+                }
+
+                if (responseText) {
+                    addMessage('assistant', responseText);
+                } else {
+                    addMessage('error', '未收到 AI 回复，请检查模型配置', false);
+                    // Reload messages to see if anything was added
+                    setTimeout(() => loadMessages(), 1000);
+                }
+
+            } catch (error) {
+                console.error('[ERROR]', error);
+                addMessage('error', '发送失败: ' + error.message, false);
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+                sendBtn.textContent = '发送';
+            }
+        }
+
+        function setStatus(status) {
+            statusDot.className = 'status-dot ' + status;
+            statusText.textContent = status === 'online' ? '在线' : status === 'offline' ? '离线' : '连接中...';
+        }
+
+        function addMessage(role, content, scroll = true) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ' + role;
+            msgDiv.innerHTML = `
+                <div class="message-header">
+                    <span>${role === 'user' ? '用户' : role === 'error' ? '错误' : 'AI'}</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${escapeHtml(content)}</div>
+            `;
+            chatContainer.appendChild(msgDiv);
+            if (scroll) scrollToBottom();
+        }
+
+        function addSystemMessage(text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message system';
+            msgDiv.textContent = text;
+            chatContainer.appendChild(msgDiv);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        connectBtn.addEventListener('click', connect);
+        sendBtn.addEventListener('click', sendPrompt);
+        promptInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); sendPrompt(); }
+        });
+        newSessionBtn.addEventListener('click', createSession);
+
+        if (localStorage.getItem('opencode_serverUrl')) connect();
+    </script>
+</body>
+</html>
