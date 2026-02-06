@@ -32,6 +32,41 @@
         .settings-bar { display: flex; gap: 10px; align-items: center; background: #16162a; padding: 10px 15px; border-radius: 10px; margin-bottom: 15px; }
         .settings-bar label { font-size: 0.8rem; color: #888; }
         .settings-bar select { background: #2a2a4a; border: 1px solid #444; border-radius: 6px; color: #eee; padding: 6px 10px; }
+
+        /* Processing indicator */
+        .processing-indicator { background: #1a1a3e; border-radius: 10px; padding: 12px; margin-bottom: 12px; border-left: 3px solid #667eea; }
+        .processing-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.8rem; color: #888; }
+        .processing-spinner { width: 12px; height: 12px; border: 2px solid #667eea; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .processing-steps { font-size: 0.85rem; }
+        .processing-step { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; opacity: 0.7; }
+        .processing-step.active { opacity: 1; color: #4ade80; }
+        .processing-step.completed { opacity: 0.5; text-decoration: line-through; }
+        .step-icon { flex-shrink: 0; margin-top: 2px; }
+        .step-text { flex: 1; }
+        .step-detail { font-size: 0.75rem; color: #666; margin-top: 2px; }
+
+        /* Reasoning block */
+        .reasoning-block { background: #1a1a2e; border-radius: 8px; padding: 10px; margin: 8px 0; font-size: 0.85rem; border-left: 2px solid #667eea; }
+        .reasoning-header { display: flex; align-items: center; gap: 6px; color: #888; font-size: 0.75rem; margin-bottom: 6px; cursor: pointer; }
+        .reasoning-content { color: #aaa; line-height: 1.4; max-height: 200px; overflow-y: auto; }
+        .reasoning-content.collapsed { display: none; }
+
+        /* Tool call */
+        .tool-call { background: #1a2a1a; border-radius: 8px; padding: 10px; margin: 8px 0; border-left: 2px solid #4ade80; }
+        .tool-header { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #4ade80; margin-bottom: 4px; }
+        .tool-name { font-family: monospace; background: #2a3a2a; padding: 2px 6px; border-radius: 4px; }
+        .tool-result { font-size: 0.85rem; color: #ccc; max-height: 150px; overflow-y: auto; margin-top: 6px; }
+
+        /* Stream text */
+        .stream-text { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* AI text content */
+        .ai-text-content { line-height: 1.5; }
+
+        /* Pre tag styling */
+        pre { background: #0a0a1a; padding: 8px; border-radius: 4px; overflow-x: auto; font-size: 0.8rem; margin: 4px 0; }
+        strong { color: #888; }
     </style>
 </head>
 <body>
@@ -71,6 +106,10 @@
         let currentSessionId = null;
         let isConnected = false;
         let isProcessing = false;
+        let eventStream = null;
+        let processingIndicator = null;
+        let assistantMessageDiv = null;
+        let currentReasoningDiv = null;
 
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
@@ -96,24 +135,22 @@
                 // Get providers config
                 const configResult = await client.config.providers();
                 console.log('[DEBUG] Config result:', configResult);
-                console.log('[DEBUG] Config result keys:', Object.keys(configResult));
 
-                // The SDK wraps responses: { data: {...}, ... }
                 const config = configResult.data || configResult;
-                console.log('[DEBUG] Config data:', config);
-
-                // Update model list
                 updateModelList(config);
 
                 setStatus('online');
                 isConnected = true;
                 promptInput.disabled = false;
-                sendBtn.disabled = false;
+                sendBtn.disabled = !currentSessionId;
                 connectBtn.textContent = '已连接';
                 connectBtn.disabled = true;
                 newSessionBtn.disabled = false;
 
                 localStorage.setItem('opencode_serverUrl', serverUrlInput.value);
+
+                // Subscribe to SSE events for real-time updates
+                await subscribeToEvents();
 
                 // Try to restore previous session
                 const savedSessionId = localStorage.getItem('opencode_sessionId');
@@ -132,17 +169,356 @@
             }
         }
 
+        async function subscribeToEvents() {
+            try {
+                console.log('[DEBUG] Subscribing to SSE events...');
+                const events = await client.event.subscribe();
+                eventStream = events.stream;
+
+                // Process events in background
+                (async () => {
+                    try {
+                        for await (const event of eventStream) {
+                            console.log('[EVENT]', event.type, event.properties || event.data);
+                            handleEvent(event);
+                        }
+                    } catch (err) {
+                        console.error('[SSE Error]', err);
+                    }
+                })();
+
+            } catch (error) {
+                console.error('[ERROR] Failed to subscribe to events:', error);
+            }
+        }
+
+        function handleEvent(event) {
+            // Log ALL events for debugging
+            console.log('[EVENT RAW]', JSON.stringify(event));
+
+            const eventType = event.type || event.event || event.eventType;
+            const properties = event.properties || event.data || event;
+
+            console.log('[EVENT]', eventType, properties);
+
+            // Filter events for current session only
+            if (properties.sessionID && properties.sessionID !== currentSessionId) {
+                console.log('[SKIP] Not current session:', properties.sessionID, 'vs', currentSessionId);
+                return;
+            }
+
+            switch (eventType) {
+                case 'message.created':
+                case 'messageCreate':
+                case 'messageCreated':
+                    console.log('[HANDLE] message.created');
+                    handleMessageCreated(properties);
+                    break;
+                case 'message.updated':
+                case 'messageUpdate':
+                case 'messageUpdated':
+                    console.log('[HANDLE] message.updated');
+                    handleMessageUpdated(properties);
+                    break;
+                case 'message.part.updated':
+                case 'messagePartUpdated':
+                case 'part.updated':
+                    console.log('[HANDLE] message.part.updated');
+                    // The part data is nested under properties.part
+                    handlePartUpdated(properties.part || properties);
+                    break;
+                case 'session.status':
+                    console.log('[HANDLE] session.status:', properties.status);
+                    if (properties.status?.type === 'busy') {
+                        showProcessingIndicator();
+                    } else if (properties.status?.type === 'idle') {
+                        hideProcessingIndicator();
+                    }
+                    break;
+                default:
+                    console.log('[Unhandled Event Type]', eventType);
+            }
+        }
+
+        function handleMessageCreated(msg) {
+            if (msg.info?.role === 'assistant' && isProcessing) {
+                // Create placeholder for assistant message
+                if (!assistantMessageDiv) {
+                    assistantMessageDiv = createAssistantMessage('');
+                    chatContainer.appendChild(assistantMessageDiv);
+                }
+            }
+        }
+
+        function handleMessageUpdated(msg) {
+            console.log('[DEBUG] Message updated:', msg);
+            // Reload messages when a message is updated (but not during active processing)
+            if (msg.info?.role === 'assistant' && !isProcessing) {
+                loadMessages();
+            }
+        }
+
+        function handlePartUpdated(part) {
+            console.log('[DEBUG] Part updated:', part);
+
+            // Filter for current session
+            if (part.sessionID && part.sessionID !== currentSessionId) {
+                return;
+            }
+
+            // Create assistant message container if needed
+            if (!assistantMessageDiv) {
+                assistantMessageDiv = createAssistantMessage('');
+                chatContainer.appendChild(assistantMessageDiv);
+            }
+
+            const contentDiv = assistantMessageDiv.querySelector('.message-content');
+            if (!contentDiv) return;
+
+            const partId = part.id;
+            const partType = part.type;
+
+            console.log('[PART] Type:', partType, 'ID:', partId, 'Delta:', part.delta, 'Text:', part.text?.substring(0, 50));
+
+            switch (partType) {
+                        case 'text': {
+                    // SSE sends cumulative text - find or create the text element for this part
+                    const textContent = part.text || '';
+                    if (textContent) {
+                        // Use part ID to find the specific element for this part
+                        let textDiv = contentDiv.querySelector(`.text-block[data-part-id="${partId}"]`);
+                        if (!textDiv) {
+                            textDiv = document.createElement('div');
+                            textDiv.className = 'text-block stream-text';
+                            textDiv.setAttribute('data-part-id', partId || 'unknown');
+                            textDiv.style.whiteSpace = 'pre-wrap';
+                            contentDiv.appendChild(textDiv);
+                        }
+                        // Only update if content is different and longer
+                        if (textContent.length > textDiv.textContent.length) {
+                            textDiv.textContent = textContent;
+                            scrollToBottom();
+                        }
+                    }
+                    break;
+                }
+
+                case 'reasoning': {
+                    // SSE sends cumulative reasoning - find or create element for this part
+                    let reasoningDiv = contentDiv.querySelector(`.reasoning-inline[data-part-id="${partId}"]`);
+                    if (!reasoningDiv) {
+                        reasoningDiv = document.createElement('div');
+                        reasoningDiv.className = 'reasoning-inline';
+                        reasoningDiv.setAttribute('data-part-id', partId || 'unknown');
+                        reasoningDiv.style.color = '#888';
+                        reasoningDiv.style.fontStyle = 'italic';
+                        reasoningDiv.style.fontSize = '0.85rem';
+                        reasoningDiv.style.marginBottom = '8px';
+                        reasoningDiv.style.padding = '8px';
+                        reasoningDiv.style.background = '#1a1a2e';
+                        reasoningDiv.style.borderRadius = '4px';
+                        reasoningDiv.style.whiteSpace = 'pre-wrap';
+                        contentDiv.appendChild(reasoningDiv);
+                    }
+                    // Only update if content is longer
+                    const reasoningText = part.text || '';
+                    if (reasoningText.length > reasoningDiv.textContent.length) {
+                        reasoningDiv.textContent = reasoningText;
+                        scrollToBottom();
+                    }
+                    break;
+                }
+
+                case 'step-start':
+                    showProcessingIndicator();
+                    break;
+
+                case 'step-finish':
+                    hideProcessingIndicator();
+                    break;
+
+                case 'tool-call':
+                case 'toolCall': {
+                    // Find or create tool call element for this part
+                    let toolDiv = contentDiv.querySelector(`.tool-inline[data-part-id="${partId}"]`);
+                    if (!toolDiv) {
+                        console.log('[TOOL CALL]', part);
+                        const toolName = part.name || part.toolName || part.tool || 'unknown';
+                        const toolArgs = part.arguments || part.args || {};
+                        const toolResult = part.result || part.output;
+                        toolDiv = document.createElement('div');
+                        toolDiv.className = 'tool-inline';
+                        toolDiv.setAttribute('data-part-id', partId || 'unknown');
+                        toolDiv.style.color = '#4ade80';
+                        toolDiv.style.fontSize = '0.85rem';
+                        toolDiv.style.marginTop = '4px';
+                        toolDiv.style.padding = '4px 8px';
+                        toolDiv.style.background = '#1a2a1a';
+                        toolDiv.style.borderRadius = '4px';
+                        toolDiv.style.border = '1px solid #2a3a2a';
+
+                        let toolText = `🔧 ${toolName}`;
+                        if (Object.keys(toolArgs).length > 0) {
+                            toolText += `(${JSON.stringify(toolArgs).substring(0, 50)}...)`;
+                        }
+                        if (toolResult) {
+                            toolText += ' ✓';
+                        }
+                        toolDiv.textContent = toolText;
+                        contentDiv.appendChild(toolDiv);
+                        scrollToBottom();
+                    }
+                    break;
+                }
+
+                default:
+                    console.log('[Unknown Part Type]', partType, part);
+                    break;
+            }
+        }
+
+        function showProcessingIndicator() {
+            if (processingIndicator) return;
+
+            processingIndicator = document.createElement('div');
+            processingIndicator.className = 'processing-indicator';
+            processingIndicator.innerHTML = `
+                <div class="processing-header">
+                    <span class="processing-spinner"></span>
+                    <span>AI 正在处理...</span>
+                </div>
+                <div class="processing-steps" id="processingSteps"></div>
+            `;
+            chatContainer.appendChild(processingIndicator);
+            scrollToBottom();
+        }
+
+        function hideProcessingIndicator() {
+            if (processingIndicator) {
+                processingIndicator.style.opacity = '0';
+                processingIndicator.style.transition = 'opacity 0.3s';
+                setTimeout(() => processingIndicator?.remove(), 300);
+                processingIndicator = null;
+            }
+        }
+
+        function updateProcessingStep(name, status, detail = '') {
+            if (!processingIndicator) showProcessingIndicator();
+
+            const stepsDiv = processingIndicator.querySelector('.processing-steps');
+            let stepDiv = stepsDiv.querySelector('.processing-step');
+
+            if (!stepDiv) {
+                stepDiv = document.createElement('div');
+                stepDiv.className = `processing-step ${status}`;
+                stepDiv.innerHTML = `
+                    <span class="step-icon">${status === 'active' ? '⏳' : '✓'}</span>
+                    <div class="step-text">
+                        <div>${escapeHtml(name)}</div>
+                        ${detail ? `<div class="step-detail">${escapeHtml(detail)}</div>` : ''}
+                    </div>
+                `;
+                stepsDiv.appendChild(stepDiv);
+            } else {
+                stepDiv.className = `processing-step ${status}`;
+                const icon = stepDiv.querySelector('.step-icon');
+                if (icon) icon.textContent = status === 'completed' ? '✓' : '⏳';
+            }
+            scrollToBottom();
+        }
+
+        function addProcessingStep(name, status = 'active', detail = '') {
+            if (!processingIndicator) showProcessingIndicator();
+
+            const stepsDiv = processingIndicator.querySelector('.processing-steps');
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `processing-step ${status}`;
+            stepDiv.innerHTML = `
+                <span class="step-icon">${status === 'active' ? '⏳' : '✓'}</span>
+                <div class="step-text">
+                    <div>${escapeHtml(name)}</div>
+                    ${detail ? `<div class="step-detail">${escapeHtml(detail)}</div>` : ''}
+                </div>
+            `;
+            stepsDiv.appendChild(stepDiv);
+            scrollToBottom();
+        }
+
+        function showToolCall(toolData) {
+            if (!assistantMessageDiv) {
+                assistantMessageDiv = createAssistantMessage('');
+                chatContainer.appendChild(assistantMessageDiv);
+            }
+
+            const contentDiv = assistantMessageDiv.querySelector('.message-content');
+            const toolName = toolData.name || toolData.toolName || toolData.tool || 'unknown';
+
+            // Check if tool call already exists, update it instead of creating duplicate
+            let toolDiv = contentDiv.querySelector(`.tool-call[data-tool="${escapeHtml(toolName)}"]`);
+
+            if (!toolDiv) {
+                toolDiv = document.createElement('div');
+                toolDiv.className = 'tool-call';
+                toolDiv.setAttribute('data-tool', toolName);
+
+                // Insert in correct position: after reasoning, before text
+                const reasoningBlock = contentDiv.querySelector('.reasoning-block');
+                const textContent = contentDiv.querySelector('.ai-text-content');
+
+                if (reasoningBlock && textContent) {
+                    contentDiv.insertBefore(toolDiv, textContent);
+                } else if (textContent) {
+                    contentDiv.insertBefore(toolDiv, textContent);
+                } else if (reasoningBlock) {
+                    contentDiv.insertBefore(toolDiv, reasoningBlock.nextSibling);
+                } else {
+                    contentDiv.appendChild(toolDiv);
+                }
+            }
+
+            // Build/update content
+            const toolArgs = toolData.arguments || toolData.args || {};
+            const toolResult = toolData.result || toolData.output;
+
+            let html = `
+                <div class="tool-header">
+                    <span>🔧</span>
+                    <span class="tool-name">${escapeHtml(toolName)}</span>
+                </div>`;
+
+            if (Object.keys(toolArgs).length > 0) {
+                html += `<div class="tool-result"><strong>参数:</strong> <pre>${escapeHtml(JSON.stringify(toolArgs, null, 2))}</pre></div>`;
+            }
+
+            if (toolResult !== undefined) {
+                const resultStr = typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult, null, 2);
+                html += `<div class="tool-result"><strong>结果:</strong> <pre>${escapeHtml(resultStr.substring(0, 500))}${resultStr.length > 500 ? '...' : ''}</pre></div>`;
+            }
+
+            toolDiv.innerHTML = html;
+            scrollToBottom();
+        }
+
+        function createAssistantMessage(content) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message assistant';
+            msgDiv.innerHTML = `
+                <div class="message-header">
+                    <span>AI</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${escapeHtml(content)}</div>
+            `;
+            return msgDiv;
+        }
+
         function updateModelList(config) {
             modelSelect.innerHTML = '';
-            console.log('[DEBUG] updateModelList input:', config);
 
-            // Group models by provider
             const models = [];
             const providers = config.providers || config.all || [];
-            console.log('[DEBUG] Providers:', providers);
 
             providers.forEach(p => {
-                console.log('[DEBUG] Provider:', p.id || p.providerID, p);
                 const providerID = p.providerID || p.id;
                 const providerModels = p.models || {};
                 Object.entries(providerModels).forEach(([modelId, modelInfo]) => {
@@ -154,9 +530,6 @@
                 });
             });
 
-            console.log('[DEBUG] All models:', models);
-
-            // Sort by cost (free models first)
             models.sort((a, b) => a.cost - b.cost);
 
             models.forEach(m => {
@@ -166,9 +539,6 @@
                 modelSelect.appendChild(option);
             });
 
-            console.log('[DEBUG] Model select options count:', modelSelect.options.length);
-
-            // Default to first free model (minimax-m2.1-free is preferred)
             const minimaxModel = models.find(m => m.value.includes('minimax-m2.1-free'));
             if (minimaxModel) {
                 modelSelect.value = minimaxModel.value;
@@ -188,12 +558,9 @@
                     body: { title: 'Web Session ' + new Date().toLocaleTimeString() }
                 });
 
-                console.log('[DEBUG] Session created:', session);
                 currentSessionId = session.data?.id || session.id;
-                console.log('[DEBUG] Session ID:', currentSessionId);
 
                 if (!currentSessionId) {
-                    console.error('[ERROR] No session ID in response:', session);
                     addSystemMessage('创建失败: 未能获取会话 ID');
                     return;
                 }
@@ -201,8 +568,8 @@
                 localStorage.setItem('opencode_sessionId', currentSessionId);
                 chatContainer.innerHTML = '';
                 addSystemMessage('已创建会话 - ' + currentSessionId.slice(-8));
+                sendBtn.disabled = false;
 
-                // Load any existing messages
                 await loadMessages();
 
             } catch (error) {
@@ -219,21 +586,70 @@
                     path: { id: currentSessionId }
                 });
 
-                console.log('[DEBUG] Messages:', messages);
+                console.log('[DEBUG] Loading messages:', messages);
 
                 chatContainer.innerHTML = '';
                 if (messages.data && Array.isArray(messages.data)) {
                     messages.data.forEach(msg => {
                         const role = msg.info?.role || 'user';
+
+                        // Skip system messages
+                        if (role === 'system') return;
+
+                        console.log('[LOAD MSG]', role, msg);
+
+                        let hasContent = false;
                         let content = '';
-                        if (msg.parts) {
-                            content = msg.parts
-                                .filter(p => p.type === 'text')
-                                .map(p => p.text)
-                                .join('\n');
+                        let partsHtml = '';
+
+                        // Process all parts
+                        if (msg.parts && Array.isArray(msg.parts)) {
+                            msg.parts.forEach(p => {
+                                console.log('[LOAD PART]', p.type, p);
+
+                                switch (p.type) {
+                                    case 'text':
+                                        content += p.text;
+                                        hasContent = true;
+                                        break;
+
+                                    case 'reasoning':
+                                        partsHtml += `
+                                            <div class="reasoning-block">
+                                                <div class="reasoning-header" onclick="this.nextElementSibling.classList.toggle('collapsed')">
+                                                    <span>🧠</span>
+                                                    <span>思考过程</span>
+                                                    <span style="margin-left: auto;">▼</span>
+                                                </div>
+                                                <div class="reasoning-content collapsed">${escapeHtml(p.text || p.content || '')}</div>
+                                            </div>`;
+                                        hasContent = true;
+                                        break;
+
+                                    case 'tool-call':
+                                    case 'toolCall':
+                                    case 'tool':
+                                        partsHtml += createToolCallHtml(p);
+                                        hasContent = true;
+                                        break;
+
+                                    case 'step-start':
+                                    case 'step-finish':
+                                        // Skip step markers in loaded messages
+                                        break;
+
+                                    default:
+                                        console.log('[Unknown part type in load]', p.type, p);
+                                        if (p.text) {
+                                            content += p.text;
+                                            hasContent = true;
+                                        }
+                                }
+                            });
                         }
-                        if (content && role !== 'system') {
-                            addMessage(role, content, false);
+
+                        if (hasContent) {
+                            addMessageWithParts(role, content, partsHtml, false);
                         }
                     });
                 }
@@ -241,6 +657,51 @@
             } catch (error) {
                 console.error('[ERROR] Load messages:', error);
             }
+        }
+
+        function createToolCallHtml(toolData) {
+            const toolName = toolData.name || toolData.toolName || toolData.tool || 'unknown';
+            const toolArgs = toolData.arguments || toolData.args || toolData.input || {};
+            const toolResult = toolData.result || toolData.output;
+
+            let html = `
+                <div class="tool-call">
+                    <div class="tool-header">
+                        <span>🔧</span>
+                        <span class="tool-name">${escapeHtml(toolName)}</span>
+                    </div>`;
+
+            if (Object.keys(toolArgs).length > 0) {
+                html += `<div class="tool-result"><strong>参数:</strong> <pre>${escapeHtml(JSON.stringify(toolArgs, null, 2))}</pre></div>`;
+            }
+
+            if (toolResult !== undefined) {
+                const resultStr = typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult, null, 2);
+                html += `<div class="tool-result"><strong>结果:</strong> <pre>${escapeHtml(resultStr.substring(0, 500))}${resultStr.length > 500 ? '...' : ''}</pre></div>`;
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function addMessageWithParts(role, content, partsHtml, scroll = true) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ' + role;
+
+            let contentHtml = '';
+            if (content) {
+                contentHtml = `<div class="stream-text">${escapeHtml(content)}</div>`;
+            }
+
+            msgDiv.innerHTML = `
+                <div class="message-header">
+                    <span>${role === 'user' ? '用户' : role === 'error' ? '错误' : 'AI'}</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${contentHtml}${partsHtml}</div>
+            `;
+            chatContainer.appendChild(msgDiv);
+            if (scroll) scrollToBottom();
         }
 
         async function sendPrompt() {
@@ -251,12 +712,21 @@
             sendBtn.disabled = true;
             sendBtn.innerHTML = '<span class="loading"></span>';
 
+            // Reset state
+            assistantMessageDiv = null;
+            currentReasoningDiv = null;
+
             addMessage('user', text);
             promptInput.value = '';
 
+            showProcessingIndicator();
+            addProcessingStep('发送消息...', 'active');
+
             try {
                 const [providerID, modelID] = modelSelect.value.split(':');
-                console.log('[DEBUG] Sending with model:', { providerID, modelID });
+
+                updateProcessingStep('发送消息...', 'completed');
+                addProcessingStep('AI 思考中...', 'active');
 
                 // Use session.prompt - this returns the AI response directly
                 const result = await client.session.prompt({
@@ -268,38 +738,35 @@
                 });
 
                 console.log('[DEBUG] Prompt result:', result);
-                console.log('[DEBUG] Result keys:', Object.keys(result));
-                console.log('[DEBUG] Result.data:', result.data);
 
-                // Extract response from result
+                updateProcessingStep('AI 思考中...', 'completed');
+                hideProcessingIndicator();
+
+                // Extract and display final response
+                const messageObj = result.data || result;
                 let responseText = '';
 
-                // The SDK wraps responses: { data: {...}, response: {...}, request: {...} }
-                const messageObj = result.data || result;
-                console.log('[DEBUG] Message object:', messageObj);
-
                 if (messageObj.parts) {
-                    console.log('[DEBUG] Parts:', messageObj.parts);
                     responseText = messageObj.parts
                         .filter(p => p.type === 'text')
                         .map(p => p.text)
                         .join('\n');
-                    console.log('[DEBUG] Response text:', responseText);
                 }
 
-                if (responseText) {
-                    addMessage('assistant', responseText);
-                } else {
-                    addMessage('error', '未收到 AI 回复，请检查模型配置', false);
-                    // Reload messages to see if anything was added
-                    setTimeout(() => loadMessages(), 1000);
+                if (responseText && !assistantMessageDiv) {
+                    assistantMessageDiv = createAssistantMessage(responseText);
+                    chatContainer.appendChild(assistantMessageDiv);
                 }
+
+                scrollToBottom();
 
             } catch (error) {
                 console.error('[ERROR]', error);
+                hideProcessingIndicator();
                 addMessage('error', '发送失败: ' + error.message, false);
             } finally {
                 isProcessing = false;
+                assistantMessageDiv = null;
                 sendBtn.disabled = false;
                 sendBtn.textContent = '发送';
             }
@@ -310,15 +777,45 @@
             statusText.textContent = status === 'online' ? '在线' : status === 'offline' ? '离线' : '连接中...';
         }
 
-        function addMessage(role, content, scroll = true) {
+        function addMessage(role, content, scroll = true, parts = null) {
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message ' + role;
+
+            let partsHtml = '';
+            if (parts) {
+                // Render all parts with appropriate styling
+                parts.forEach(p => {
+                    switch (p.type) {
+                        case 'text':
+                            partsHtml += `<div class="stream-text">${escapeHtml(p.text)}</div>`;
+                            break;
+                        case 'reasoning':
+                            partsHtml += `
+                                <div class="reasoning-block">
+                                    <div class="reasoning-header" onclick="this.nextElementSibling.classList.toggle('collapsed')">
+                                        <span>🧠</span>
+                                        <span>思考过程</span>
+                                        <span style="margin-left: auto;">▼</span>
+                                    </div>
+                                    <div class="reasoning-content">${escapeHtml(p.text || p.content || '')}</div>
+                                </div>`;
+                            break;
+                        case 'step-start':
+                        case 'step-finish':
+                            // Skip steps in loaded messages
+                            break;
+                    }
+                });
+            } else {
+                partsHtml = escapeHtml(content);
+            }
+
             msgDiv.innerHTML = `
                 <div class="message-header">
                     <span>${role === 'user' ? '用户' : role === 'error' ? '错误' : 'AI'}</span>
                     <span>${new Date().toLocaleTimeString()}</span>
                 </div>
-                <div class="message-content">${escapeHtml(content)}</div>
+                <div class="message-content">${partsHtml}</div>
             `;
             chatContainer.appendChild(msgDiv);
             if (scroll) scrollToBottom();

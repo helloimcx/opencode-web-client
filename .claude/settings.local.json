@@ -4,7 +4,9 @@
       "Bash(curl:*)",
       "Bash(lsof:*)",
       "Bash(/Users/mochuxian/.nvm/versions/node/v25.3.0/lib/node_modules/opencode-ai/node_modules/opencode-darwin-x64/bin/opencode:*)",
-      "Bash(SESSION=\"ses_3cf15785fffeu7q4LREl6oHwXK\")"
+      "Bash(SESSION=\"ses_3cf15785fffeu7q4LREl6oHwXK\")",
+      "Bash(python3:*)",
+      "Bash(python:*)"
     ]
   }
 }
