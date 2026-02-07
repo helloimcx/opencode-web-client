@@ -372,7 +372,39 @@
                 }
 
                 default:
-                    console.log('[Unknown Part Type]', partType, part);
+                    // Check if this looks like a tool call even if type doesn't match
+                    if (part.name || part.toolName || part.tool || part.tool) {
+                        console.log('[TOOL CALL - Unknown Type]', partType, part);
+                        const toolName = part.name || part.toolName || part.tool || 'unknown';
+                        const toolArgs = part.arguments || part.args || {};
+                        const toolResult = part.result || part.output;
+                        let toolDiv = contentDiv.querySelector(`.tool-inline[data-part-id="${partId || 'unknown'}"]`);
+                        if (!toolDiv) {
+                            toolDiv = document.createElement('div');
+                            toolDiv.className = 'tool-inline';
+                            toolDiv.setAttribute('data-part-id', partId || 'unknown');
+                            toolDiv.style.color = '#4ade80';
+                            toolDiv.style.fontSize = '0.85rem';
+                            toolDiv.style.marginTop = '4px';
+                            toolDiv.style.padding = '4px 8px';
+                            toolDiv.style.background = '#1a2a1a';
+                            toolDiv.style.borderRadius = '4px';
+                            toolDiv.style.border = '1px solid #2a3a2a';
+
+                            let toolText = `🔧 ${toolName}`;
+                            if (Object.keys(toolArgs).length > 0) {
+                                toolText += `(${JSON.stringify(toolArgs).substring(0, 50)}...)`;
+                            }
+                            if (toolResult) {
+                                toolText += ' ✓';
+                            }
+                            toolDiv.textContent = toolText;
+                            contentDiv.appendChild(toolDiv);
+                            scrollToBottom();
+                        }
+                    } else {
+                        console.log('[Unknown Part Type]', partType, part);
+                    }
                     break;
             }
         }

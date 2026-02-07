@@ -1,0 +1,414 @@
+- generic [active] [ref=e1]:
+  - navigation "顶部导航" [ref=e4]:
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - generic [ref=e7]:
+          - link [ref=e8] [cursor=pointer]:
+            - /url: //www.jd.com
+          - img [ref=e9]
+          - link "京东首页" [ref=e11] [cursor=pointer]:
+            - /url: //www.jd.com
+      - listitem [ref=e12]:
+        - generic [ref=e13]:
+          - button "地区" [ref=e14] [cursor=pointer]: 中国大陆版
+          - generic [ref=e15]: 
+      - listitem [ref=e16]
+      - listitem [ref=e17]:
+        - generic [ref=e18]:
+          - link "o1h8650e07n6..." [ref=e19] [cursor=pointer]:
+            - /url: //home.jd.com/
+          - generic [ref=e20]: 
+      - generic [ref=e21]:
+        - listitem [ref=e22]
+        - listitem [ref=e23]:
+          - generic [ref=e25] [cursor=pointer]: 同款搜低价
+    - list [ref=e26]:
+      - listitem [ref=e27]:
+        - generic [ref=e28]:
+          - img [ref=e29]
+          - link "购物车 1" [ref=e31] [cursor=pointer]:
+            - /url: //cart.jd.com/cart.action
+      - listitem [ref=e32]
+      - listitem [ref=e33]:
+        - link "我的订单" [ref=e35] [cursor=pointer]:
+          - /url: //order.jd.com/center/list.action
+      - listitem [ref=e36]
+      - listitem [ref=e37]:
+        - generic [ref=e38]:
+          - link "我的京东" [ref=e39] [cursor=pointer]:
+            - /url: javascript:void(0);
+          - generic [ref=e40]: 
+      - listitem [ref=e41]
+      - listitem [ref=e42]:
+        - generic [ref=e43]:
+          - link "企业采购" [ref=e44] [cursor=pointer]:
+            - /url: //b.jd.com/newuser/?bjdSourceChannel=cjdqiehuanqiyeban
+          - generic [ref=e45]: 
+      - listitem [ref=e46]
+      - listitem [ref=e47]:
+        - button "网站导航" [ref=e48]:
+          - text: 网站导航
+          - generic [ref=e49]: 
+      - listitem [ref=e50]
+      - listitem [ref=e51]:
+        - generic [ref=e52]:
+          - text: 手机京东
+          - generic [ref=e53]: 
+      - listitem [ref=e54]
+      - listitem [ref=e55]:
+        - link "网站无障碍" [ref=e57] [cursor=pointer]:
+          - /url: javascript:void(0)
+  - generic [ref=e60]:
+    - link "运动户外" [ref=e62] [cursor=pointer]:
+      - /url: //channel.jd.com/sports.html
+    - generic [ref=e63]: ">"
+    - link "运动服饰" [ref=e65] [cursor=pointer]:
+      - /url: //list.jd.com/list.html?cat=1318,12102
+    - generic [ref=e66]: ">"
+    - link "运动羽绒服" [ref=e68] [cursor=pointer]:
+      - /url: //list.jd.com/list.html?cat=1318,12102,12104
+    - generic [ref=e69]: ">"
+    - link "阿迪达斯（adidas）" [ref=e71] [cursor=pointer]:
+      - /url: //list.jd.com/list.html?cat=1318,12102,12104&ev=exbrand_132345
+    - generic [ref=e72]: ">"
+    - generic "阿迪达斯JL9585" [ref=e73]
+  - generic [ref=e75]:
+    - generic [ref=e77] [cursor=pointer]:
+      - img [ref=e79]
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - img [ref=e83]
+          - generic "Adidas运动京东自营旗舰店" [ref=e84]
+        - generic [ref=e86]:
+          - generic [ref=e87]: 进店逛逛，享更多优惠
+          - generic [ref=e88]: 精选镇店好物，快来逛逛
+          - generic [ref=e89]: 进店逛逛，享更多优惠
+          - generic [ref=e90]: 精选镇店好物，快来逛逛
+      - generic [ref=e91]:
+        - generic [ref=e93]: 关注店铺
+        - generic [ref=e94]:
+          - img [ref=e95]
+          - generic [ref=e96]: 联系客服
+    - generic [ref=e97]:
+      - generic [ref=e99]:
+        - textbox "搜索" [ref=e100]: 阿迪达斯羽绒服男
+        - button "搜本店" [ref=e101] [cursor=pointer]
+        - button "搜全站" [ref=e102] [cursor=pointer]
+      - generic [ref=e103]:
+        - generic [ref=e104] [cursor=pointer]: adidas羽绒服
+        - generic [ref=e106] [cursor=pointer]: 阿迪达斯棉服
+        - generic [ref=e108] [cursor=pointer]: 男士羽绒服
+        - generic [ref=e110] [cursor=pointer]: 阿迪达斯
+        - generic [ref=e112] [cursor=pointer]: 羽绒服
+  - generic [ref=e113]:
+    - generic [ref=e114]:
+      - generic [ref=e115]:
+        - generic [ref=e117]:
+          - generic [ref=e120]:
+            - img [ref=e122] [cursor=pointer]
+            - img [ref=e124] [cursor=pointer]
+            - img [ref=e126] [cursor=pointer]
+            - img [ref=e128] [cursor=pointer]
+            - img [ref=e130] [cursor=pointer]
+            - img [ref=e132] [cursor=pointer]
+            - img [ref=e134] [cursor=pointer]
+            - img [ref=e136] [cursor=pointer]
+            - img [ref=e138] [cursor=pointer]
+            - img [ref=e140] [cursor=pointer]
+            - generic [ref=e144] [cursor=pointer]: 规格参数
+          - img [ref=e150]
+        - generic [ref=e152]:
+          - list [ref=e154]:
+            - listitem [ref=e155]: 大家评
+            - listitem [ref=e156] [cursor=pointer]: 店铺
+            - listitem [ref=e157] [cursor=pointer]: 商品详情
+            - listitem [ref=e158] [cursor=pointer]: 售后保障
+            - listitem [ref=e159] [cursor=pointer]: 推荐
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - generic [ref=e164]:
+                  - generic [ref=e165]:
+                    - generic [ref=e166]: 买家评价(2万+)
+                    - generic [ref=e168] [cursor=pointer]: 超97%买家赞不绝口
+                  - generic [ref=e170]:
+                    - generic [ref=e171]:
+                      - generic [ref=e172]: 穿起来超舒适
+                      - generic [ref=e173]: "12"
+                    - generic [ref=e174]:
+                      - generic [ref=e175]: 尺码很合适
+                      - generic [ref=e176]: "11"
+                    - generic [ref=e177]:
+                      - generic [ref=e178]: 穿起来超轻便
+                      - generic [ref=e179]: "1"
+                    - generic [ref=e180]:
+                      - generic [ref=e181]: 保暖性能超强
+                      - generic [ref=e182]: "16"
+                    - generic [ref=e183]:
+                      - generic [ref=e184]: 版型超合适
+                      - generic [ref=e185]: "4"
+                    - generic [ref=e186]:
+                      - generic [ref=e187]: 工艺超精细
+                      - generic [ref=e188]: "7"
+                    - generic [ref=e189]:
+                      - generic [ref=e190]: 上身超帅气
+                      - generic [ref=e191]: "2"
+                    - generic [ref=e192]:
+                      - generic [ref=e193]: 超耐脏
+                      - generic [ref=e194]: "1"
+                    - generic [ref=e195]:
+                      - generic [ref=e196]: 设计超简约
+                      - generic [ref=e197]: "3"
+                    - generic [ref=e198]:
+                      - generic [ref=e199]: 充绒量很足
+                      - generic [ref=e200]: "3"
+                    - generic [ref=e201]:
+                      - generic [ref=e202]: 面料超优质
+                      - generic [ref=e203]: "3"
+                    - generic [ref=e204]:
+                      - generic [ref=e205]: 颜色很赞
+                      - generic [ref=e206]: "5"
+                  - list [ref=e207]:
+                    - listitem [ref=e208]:
+                      - generic [ref=e210]: 一个老八嘎
+                      - generic [ref=e211]: 京东物流真的太赞了，拍下后隔天就收到货，配送速度超惊喜！鞋子到手质感特别好，尺码特别标准，完全不用费心选码，上脚脚感超舒服，鞋底软和还很有弹性，走路久了也不觉得累。做工特别精细，没有多余的线头，材质也没有异味，日常搭配各种裤子都很百搭，颜值和实用性都在线，这个价格能买到这么好的鞋子，性价比真的绝了，真心推荐给大家！
+                      - generic [ref=e212]:
+                        - img [ref=e214] [cursor=pointer]
+                        - img [ref=e216] [cursor=pointer]
+                        - img [ref=e218] [cursor=pointer]
+                    - listitem [ref=e219]:
+                      - generic [ref=e221]: 普***花
+                      - generic [ref=e222]: 这款羽绒服性价比超高！蓬松度在线，充绒量足，零下十度穿也不冷，防风面料还能挡住寒风。版型宽松不臃肿，搭卫衣牛仔裤都好看。口袋带拉链很贴心，放手机钥匙不担心掉。美中不足是有点显沉，收纳占空间。整体值得入手，怕冷星人闭眼冲！
+                      - generic [ref=e223]:
+                        - img [ref=e225] [cursor=pointer]
+                        - img [ref=e227] [cursor=pointer]
+                        - img [ref=e229] [cursor=pointer]
+                    - listitem [ref=e230]:
+                      - generic [ref=e232]: V***-
+                      - generic [ref=e233]: 阿迪达斯这款70%鸭绒羽绒服真的是冬季通勤王炸！XL码版型超正，上身利落不臃肿，还能轻松套毛衣打底。70%鸭绒填充保暖力拉满，零下几度出门寒风都吹不透，防风防泼水面料应对雨雪天也超省心。轻量化设计完全不压肩，日常赶地铁、户外散步都灵活。立领护颈+弹性袖口锁温超贴心，拉链口袋还能放手机钥匙。经典黑色百搭耐脏，做工扎实走线工整，性价比直接拉满，闭眼冲！
+                      - generic [ref=e234]:
+                        - img [ref=e236] [cursor=pointer]
+                        - img [ref=e238] [cursor=pointer]
+                  - generic [ref=e240] [cursor=pointer]: 全部评价
+                - generic [ref=e242]:
+                  - generic [ref=e243]: 问大家
+                  - generic [ref=e244]:
+                    - generic [ref=e245]:
+                      - generic [ref=e246]:
+                        - img "question icon" [ref=e247]
+                        - generic "冬天穿够暖吗？" [ref=e248]
+                      - generic [ref=e249]:
+                        - generic [ref=e251]:
+                          - img "user avatar" [ref=e252]
+                          - generic "充绒量很足不臃肿" [ref=e253]
+                        - generic [ref=e254] [cursor=pointer]:
+                          - generic [ref=e255]: 查看更多5个回答
+                          - img "arrow" [ref=e256]
+                    - generic [ref=e257]:
+                      - generic [ref=e258]:
+                        - img "question icon" [ref=e259]
+                        - generic "高168，重142，女，穿几码合适呢？" [ref=e260]
+                      - generic [ref=e261]:
+                        - generic [ref=e263]:
+                          - img "user avatar" [ref=e264]
+                          - generic "s紧身，m合适" [ref=e265]
+                        - generic [ref=e266] [cursor=pointer]:
+                          - generic [ref=e267]: 查看更多6个回答
+                          - img "arrow" [ref=e268]
+                  - generic [ref=e269] [cursor=pointer]:
+                    - generic [ref=e270]: 全部问答
+                    - img "arrow" [ref=e271]
+              - img [ref=e273]
+              - img [ref=e275]
+            - generic [ref=e276]:
+              - generic [ref=e277]: 进店逛逛
+              - generic [ref=e280]:
+                - img [ref=e282] [cursor=pointer]
+                - generic [ref=e283]:
+                  - generic [ref=e284] [cursor=pointer]:
+                    - img [ref=e286]
+                    - generic "Adidas运动京东自营旗舰店" [ref=e287]
+                  - generic [ref=e290]: 10年老店
+                - generic [ref=e291]:
+                  - generic [ref=e292]:
+                    - generic [ref=e294]: 累计评价
+                    - generic [ref=e295]: 2万+
+                  - generic [ref=e297]:
+                    - generic [ref=e299]: 店铺关注
+                    - generic [ref=e300]: 1045.8万
+                - generic [ref=e301]:
+                  - generic [ref=e302] [cursor=pointer]:
+                    - img [ref=e303]
+                    - generic [ref=e304]: 联系客服
+                  - generic [ref=e305] [cursor=pointer]:
+                    - img [ref=e306]
+                    - generic [ref=e307]: 进店逛逛
+            - generic [ref=e308]:
+              - generic [ref=e309]: 商品详情
+              - generic [ref=e311]:
+                - generic [ref=e312]:
+                  - generic [ref=e314]: 品牌
+                  - generic "阿迪达斯（adidas）" [ref=e316]:
+                    - link "阿迪达斯（adidas）" [ref=e317] [cursor=pointer]:
+                      - /url: //list.jd.com/list.html?cat=1318,12102,12104&ev=exbrand_132345
+                - generic [ref=e318]:
+                  - generic [ref=e320]: 商品编号
+                  - generic "100149570326" [ref=e322]
+                - generic [ref=e323]:
+                  - generic [ref=e325]: 货号
+                  - generic "JL9584" [ref=e327]
+                - generic [ref=e328]:
+                  - generic [ref=e330]: 厚度
+                  - generic "常规" [ref=e332]
+                - generic [ref=e333]:
+                  - generic [ref=e335]: 版型
+                  - generic "常规型" [ref=e337]
+                - generic [ref=e338]:
+                  - generic [ref=e340]: 是否可定制
+                  - generic "不可定制" [ref=e342]
+                - generic [ref=e343]:
+                  - generic [ref=e345]: 适用人群
+                  - generic "成人" [ref=e347]
+                - generic [ref=e348]:
+                  - generic [ref=e350]: 领型
+                  - generic "立领" [ref=e352]
+                - generic [ref=e353]:
+                  - generic [ref=e355]: 上市时间
+                  - generic "2024年秋季" [ref=e357]
+                - generic [ref=e361]:
+                  - generic [ref=e363]: 衣长
+                  - generic "常规款" [ref=e365]
+            - generic [ref=e372]: 售后保障
+      - generic [ref=e382]:
+        - generic [ref=e383] [cursor=pointer]:
+          - generic [ref=e384]:
+            - img [ref=e386]
+            - generic [ref=e387]: 包邮
+          - img [ref=e389]
+          - img [ref=e391]
+        - generic [ref=e392]:
+          - generic [ref=e394]:
+            - generic [ref=e395]:
+              - img "4" [ref=e397]
+              - text: 阿迪达斯（adidas）冬季男子通勤防风保暖上衣立领运动70%鸭绒羽绒服 L码
+            - generic [ref=e398] [cursor=pointer]: 收藏
+          - generic [ref=e402]:
+            - generic [ref=e403]:
+              - generic [ref=e404]: ￥
+              - text: "419.00"
+              - generic [ref=e405]: 补贴价
+              - generic [ref=e406]: 已补90.00元
+            - generic [ref=e407]: ￥509.00 日常价
+          - generic [ref=e411]:
+            - generic [ref=e412]: 可再享：
+            - generic [ref=e413]:
+              - generic [ref=e414] [cursor=pointer]: 最高返41京豆
+              - img [ref=e415] [cursor=pointer]
+          - link "运动羽绒服热卖榜·第7名" [ref=e418] [cursor=pointer]:
+            - /url: https://pro.jd.com/mall/active/4JRfHorUDXgL77E9YdNxSCNMKwkJ/index.html?pageNum=1&bbtf=1&queryType=1&rankId=3017581&rankType=10&fromName=ProductdetailPC&preSrc=null&currSku=100149570326&currSpu=100149570326
+            - generic [ref=e419]: 运动羽绒服热卖榜·第7名
+          - generic [ref=e421]:
+            - generic [ref=e422]: 送至
+            - generic [ref=e425]: 11:10前付款，预计今天(02月07日)送达
+          - generic [ref=e427]:
+            - generic "广东广州市白云区白云湖街道" [ref=e432] [cursor=pointer]
+            - generic [ref=e434]:
+              - generic [ref=e435]: 京东物流
+              - generic [ref=e436]:
+                - link "今日达" [ref=e437] [cursor=pointer]:
+                  - /url: //help.jd.com/user/issue/103-983.html
+                - text: ·
+                - link "京准达" [ref=e438] [cursor=pointer]:
+                  - /url: //help.jd.com/user/issue/103-983.html
+          - generic [ref=e440]:
+            - generic [ref=e441]:
+              - generic [ref=e442]: 颜色
+              - generic [ref=e444] [cursor=pointer]:
+                - img "固态浅灰" [ref=e445]
+                - generic [ref=e446]: 固态浅灰
+            - generic [ref=e447]:
+              - generic [ref=e448]: 尺码
+              - generic [ref=e449]:
+                - generic "固态浅灰-「XS」 无货" [ref=e450] [cursor=pointer]:
+                  - generic [ref=e451]: XS
+                  - generic [ref=e452]: 无货
+                - generic [ref=e454] [cursor=pointer]: S
+                - generic [ref=e456] [cursor=pointer]: M
+                - generic [ref=e458] [cursor=pointer]: L
+                - generic [ref=e460] [cursor=pointer]: XL
+                - generic [ref=e462] [cursor=pointer]: 2XL
+                - generic "固态浅灰-「3XL」 无货" [ref=e463] [cursor=pointer]:
+                  - generic [ref=e464]: 3XL
+                  - generic [ref=e465]: 无货
+          - generic [ref=e466]:
+            - generic [ref=e467]: 服务
+            - generic [ref=e471]:
+              - generic [ref=e472]:
+                - link "包邮" [ref=e473] [cursor=pointer]:
+                  - /url: http://help.jd.com/user/issue/103-983.html
+                - text: · 可配送全球 ·
+                - link "7天价保" [ref=e474] [cursor=pointer]:
+                  - /url: https://help.jd.com/user/issue/291-4537.html
+              - generic [ref=e475]: 京东发货&售后服务 · 支持7天无理由退货
+          - generic [ref=e477]:
+            - generic [ref=e480]:
+              - button "-" [ref=e481]
+              - textbox "1" [ref=e482]
+              - button "+" [ref=e483]
+            - generic [ref=e485]:
+              - img [ref=e489] [cursor=pointer]
+              - generic [ref=e492] [cursor=pointer]: 新人到手价¥419.00 立即购买
+    - img [ref=e494]
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - link:
+            - /url: "#"
+  - generic [ref=e496]:
+    - list [ref=e497]:
+      - listitem [ref=e498]:
+        - link "首页" [ref=e499] [cursor=pointer]:
+          - /url: //www.jd.com
+          - img [ref=e501]
+          - generic [ref=e502]: 首页
+      - listitem [ref=e503]:
+        - link "1 购物车" [ref=e504] [cursor=pointer]:
+          - /url: javascript:void(0)
+          - generic [ref=e505]: "1"
+          - img [ref=e507]
+          - generic [ref=e508]: 购物车
+      - listitem [ref=e509]:
+        - link "我的" [ref=e510] [cursor=pointer]:
+          - /url: //home.jd.com
+          - img [ref=e512]
+          - generic [ref=e514]: 我的
+      - listitem [ref=e515]:
+        - link "客服" [ref=e516] [cursor=pointer]:
+          - /url: https://chat.jd.com/index.action?_t=&pid=100149570326
+          - img [ref=e518]
+          - generic [ref=e520]: 客服
+      - listitem [ref=e521]:
+        - link "手机查看" [ref=e522] [cursor=pointer]:
+          - /url: javascript:void(0)
+          - img [ref=e525]
+          - generic [ref=e527]: 手机查看
+      - listitem [ref=e528]:
+        - link "反馈" [ref=e529] [cursor=pointer]:
+          - /url: https://wj-dongjian.jd.com/q/61961f7b0871e6011f8bd699
+          - img [ref=e531]
+          - generic [ref=e533]: 反馈
+      - listitem [ref=e536]:
+        - link "插件版" [ref=e538] [cursor=pointer]:
+          - /url: javascript:void(0)
+          - img [ref=e540]
+          - generic [ref=e541]: 插件版
+    - generic [ref=e542]:
+      - link "回顶部" [ref=e543] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e544]
+        - generic [ref=e546]: 回顶部
+      - link "收起" [ref=e547] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e548]
+        - generic [ref=e549]: 收起
