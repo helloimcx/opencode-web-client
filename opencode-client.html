@@ -567,8 +567,7 @@
             models.forEach(m => {
                 const option = document.createElement('option');
                 option.value = m.value;
-                const isFree = m.value.includes('-free');
-                option.textContent = isFree ? `${m.label} (免费)` : m.label;
+                option.textContent = m.label;
                 modelSelect.appendChild(option);
             });
 
@@ -745,7 +744,7 @@
             if (scroll) scrollToBottom();
         }
 
-        async function sendPrompt() {
+        async function sendPrompt(isRetry = false) {
             const text = promptInput.value.trim();
             if (!text || !currentSessionId || isProcessing) return;
 
@@ -754,11 +753,12 @@
             sendBtn.innerHTML = '<span class="loading"></span>';
 
             // Reset state
-            assistantMessageDiv = null;
-            currentReasoningDiv = null;
-
-            addMessage('user', text);
-            promptInput.value = '';
+            if (!isRetry) {
+                assistantMessageDiv = null;
+                currentReasoningDiv = null;
+                addMessage('user', text);
+                promptInput.value = '';
+            }
 
             showProcessingIndicator();
             addProcessingStep('发送消息...', 'active');
@@ -803,6 +803,27 @@
 
             } catch (error) {
                 console.error('[ERROR]', error);
+
+                // 检查是否是付费 k2.5 模型失败
+                const currentModel = modelSelect.value;
+                const isK25Paid = currentModel.includes('k2.5') && !currentModel.includes('-free');
+
+                if (isK25Paid && !isRetry) {
+                    // 查找对应的免费 k2.5 模型
+                    const options = Array.from(modelSelect.options);
+                    const freeK25Model = options.find(opt => opt.value.includes('k2.5') && opt.value.includes('-free'));
+
+                    if (freeK25Model) {
+                        addSystemMessage('模型请求失败，自动切换模型重试...');
+                        modelSelect.value = freeK25Model.value;
+                        hideProcessingIndicator();
+
+                        // 重试
+                        await sendPrompt(true);
+                        return;
+                    }
+                }
+
                 hideProcessingIndicator();
                 addMessage('error', '发送失败: ' + error.message, false);
             } finally {
