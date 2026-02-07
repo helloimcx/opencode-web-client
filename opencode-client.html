@@ -602,34 +602,40 @@
                         let content = '';
                         let partsHtml = '';
 
-                        // Process all parts
+                        // Process all parts in order (matching real-time display)
                         if (msg.parts && Array.isArray(msg.parts)) {
                             msg.parts.forEach(p => {
                                 console.log('[LOAD PART]', p.type, p);
 
+                                const partId = p.id || 'unknown';
+
                                 switch (p.type) {
                                     case 'text':
-                                        content += p.text;
+                                        // Use text-block class like real-time display
+                                        partsHtml += `<div class="text-block stream-text" style="white-space: pre-wrap;" data-part-id="${partId}">${escapeHtml(p.text || '')}</div>`;
                                         hasContent = true;
                                         break;
 
                                     case 'reasoning':
-                                        partsHtml += `
-                                            <div class="reasoning-block">
-                                                <div class="reasoning-header" onclick="this.nextElementSibling.classList.toggle('collapsed')">
-                                                    <span>🧠</span>
-                                                    <span>思考过程</span>
-                                                    <span style="margin-left: auto;">▼</span>
-                                                </div>
-                                                <div class="reasoning-content collapsed">${escapeHtml(p.text || p.content || '')}</div>
-                                            </div>`;
+                                        // Use reasoning-inline style like real-time display
+                                        partsHtml += `<div class="reasoning-inline" data-part-id="${partId}" style="color: #888; font-style: italic; font-size: 0.85rem; margin-bottom: 8px; padding: 8px; background: #1a1a2e; border-radius: 4px; white-space: pre-wrap;">${escapeHtml(p.text || p.content || '')}</div>`;
                                         hasContent = true;
                                         break;
 
                                     case 'tool-call':
                                     case 'toolCall':
                                     case 'tool':
-                                        partsHtml += createToolCallHtml(p);
+                                        // Use tool-inline style like real-time display
+                                        const toolName = p.name || p.toolName || p.tool || 'unknown';
+                                        const toolArgs = p.arguments || p.args || {};
+                                        let toolText = `🔧 ${toolName}`;
+                                        if (Object.keys(toolArgs).length > 0) {
+                                            toolText += `(${JSON.stringify(toolArgs).substring(0, 50)}...)`;
+                                        }
+                                        if (p.result || p.output) {
+                                            toolText += ' ✓';
+                                        }
+                                        partsHtml += `<div class="tool-inline" data-part-id="${partId}" style="color: #4ade80; font-size: 0.85rem; margin-top: 4px; padding: 4px 8px; background: #1a2a1a; border-radius: 4px; border: 1px solid #2a3a2a;">${escapeHtml(toolText)}</div>`;
                                         hasContent = true;
                                         break;
 
@@ -641,7 +647,7 @@
                                     default:
                                         console.log('[Unknown part type in load]', p.type, p);
                                         if (p.text) {
-                                            content += p.text;
+                                            partsHtml += `<div class="text-block stream-text" style="white-space: pre-wrap;" data-part-id="${partId}">${escapeHtml(p.text)}</div>`;
                                             hasContent = true;
                                         }
                                 }
