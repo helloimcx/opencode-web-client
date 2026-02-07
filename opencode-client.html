@@ -567,14 +567,17 @@
             models.forEach(m => {
                 const option = document.createElement('option');
                 option.value = m.value;
-                option.textContent = m.cost === 0 ? `${m.label} (免费)` : m.label;
+                const isFree = m.value.includes('-free');
+                option.textContent = isFree ? `${m.label} (免费)` : m.label;
                 modelSelect.appendChild(option);
             });
 
-            const kimiModel = models.find(m => m.value.includes('kimi-k2.5-free'));
-            if (kimiModel) {
-                modelSelect.value = kimiModel.value;
+            // 优先选择 kimi k2.5 模型（付费版）
+            const kimiK25Model = models.find(m => m.value.includes('k2.5') && !m.value.includes('-free'));
+            if (kimiK25Model) {
+                modelSelect.value = kimiK25Model.value;
             } else {
+                // 备选：免费模型
                 const freeModel = models.find(m => m.cost === 0);
                 if (freeModel) {
                     modelSelect.value = freeModel.value;
