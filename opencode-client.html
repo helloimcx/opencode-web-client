@@ -96,6 +96,7 @@
         <div class="input-area">
             <textarea id="promptInput" placeholder="输入指令... (Enter 发送)" disabled></textarea>
             <button id="sendBtn" disabled>发送</button>
+            <button id="stopBtn" disabled style="background: #ef4444; display: none;">停止</button>
         </div>
     </div>
 
@@ -110,12 +111,14 @@
         let processingIndicator = null;
         let assistantMessageDiv = null;
         let currentReasoningDiv = null;
+        let abortController = null;
 
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
         const chatContainer = document.getElementById('chatContainer');
         const promptInput = document.getElementById('promptInput');
         const sendBtn = document.getElementById('sendBtn');
+        const stopBtn = document.getElementById('stopBtn');
         const serverUrlInput = document.getElementById('serverUrl');
         const connectBtn = document.getElementById('connectBtn');
         const newSessionBtn = document.getElementById('newSessionBtn');
@@ -751,6 +754,8 @@
             isProcessing = true;
             sendBtn.disabled = true;
             sendBtn.innerHTML = '<span class="loading"></span>';
+            stopBtn.style.display = 'none';
+            stopBtn.disabled = true;
 
             // Reset state
             if (!isRetry) {
@@ -768,6 +773,13 @@
 
                 updateProcessingStep('发送消息...', 'completed');
                 addProcessingStep('AI 思考中...', 'active');
+
+                // Show stop button when processing starts
+                stopBtn.style.display = 'inline-block';
+                stopBtn.disabled = false;
+
+                // Create new AbortController for this request
+                abortController = new AbortController();
 
                 // Use session.prompt - this returns the AI response directly
                 const result = await client.session.prompt({
@@ -804,6 +816,13 @@
             } catch (error) {
                 console.error('[ERROR]', error);
 
+                // Check if aborted
+                if (error.name === 'AbortError' || error.message?.includes('abort')) {
+                    hideProcessingIndicator();
+                    addSystemMessage('任务已停止');
+                    return;
+                }
+
                 // 检查是否是付费 k2.5 模型失败
                 const currentModel = modelSelect.value;
                 const isK25Paid = currentModel.includes('k2.5') && !currentModel.includes('-free');
@@ -829,8 +848,38 @@
             } finally {
                 isProcessing = false;
                 assistantMessageDiv = null;
+                abortController = null;
                 sendBtn.disabled = false;
                 sendBtn.textContent = '发送';
+                stopBtn.style.display = 'none';
+                stopBtn.disabled = true;
+            }
+        }
+
+        async function stopPrompt() {
+            if (!isProcessing || !currentSessionId) return;
+
+            stopBtn.disabled = true;
+            stopBtn.innerHTML = '<span class="loading"></span>';
+
+            try {
+                // Abort the request if AbortController exists
+                if (abortController) {
+                    abortController.abort();
+                }
+
+                // Call session.abort API
+                await client.session.abort({
+                    path: { id: currentSessionId }
+                });
+
+                addSystemMessage('已停止任务...');
+
+            } catch (error) {
+                console.error('[ERROR] Stop failed:', error);
+                addSystemMessage('停止失败: ' + error.message);
+            } finally {
+                stopBtn.innerHTML = '停止';
             }
         }
 
@@ -903,6 +952,7 @@
 
         connectBtn.addEventListener('click', connect);
         sendBtn.addEventListener('click', sendPrompt);
+        stopBtn.addEventListener('click', stopPrompt);
         promptInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); sendPrompt(); }
         });
