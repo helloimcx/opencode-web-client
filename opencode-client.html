@@ -539,9 +539,9 @@
                 modelSelect.appendChild(option);
             });
 
-            const minimaxModel = models.find(m => m.value.includes('minimax-m2.1-free'));
-            if (minimaxModel) {
-                modelSelect.value = minimaxModel.value;
+            const kimiModel = models.find(m => m.value.includes('kimi-k2.5-free'));
+            if (kimiModel) {
+                modelSelect.value = kimiModel.value;
             } else {
                 const freeModel = models.find(m => m.cost === 0);
                 if (freeModel) {
