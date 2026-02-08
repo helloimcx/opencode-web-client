@@ -1,0 +1,738 @@
+[
+  {
+    "timestamp": 1770482189.597908,
+    "log": "[EVENT] server.connected {}"
+  },
+  {
+    "timestamp": 1770482189.598172,
+    "log": "[EVENT] server.connected {}"
+  },
+  {
+    "timestamp": 1770482192.609292,
+    "log": "[EVENT] session.created {info: Object}"
+  },
+  {
+    "timestamp": 1770482192.609747,
+    "log": "[EVENT] session.created {info: Object}"
+  },
+  {
+    "timestamp": 1770482192.610073,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482192.610585,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.667207,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.669024,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.671502,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482196.6721191,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482196.674537,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.675133,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.6756852,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482196.676288,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482196.676877,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.677581,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.717887,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.718792,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.7196941,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.7202392,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482196.724967,
+    "log": "[EVENT] session.diff {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, diff: Array(0)}"
+  },
+  {
+    "timestamp": 1770482196.726078,
+    "log": "[EVENT] session.diff {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, diff: Array(0)}"
+  },
+  {
+    "timestamp": 1770482196.729711,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482196.730922,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482199.276237,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482199.2766268,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.044307,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.044656,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.045454,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7528\u6237}"
+  },
+  {
+    "timestamp": 1770482200.0456781,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7528\u6237}"
+  },
+  {
+    "timestamp": 1770482200.04807,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u8981\u6c42}"
+  },
+  {
+    "timestamp": 1770482200.048537,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u8981\u6c42}"
+  },
+  {
+    "timestamp": 1770482200.04937,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6267\u884c}"
+  },
+  {
+    "timestamp": 1770482200.049621,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6267\u884c}"
+  },
+  {
+    "timestamp": 1770482200.050362,
+    "log": "[EVENT] message.part.updated {part: Object, delta:  `}"
+  },
+  {
+    "timestamp": 1770482200.050557,
+    "log": "[EVENT] message.part.updated {part: Object, delta:  `}"
+  },
+  {
+    "timestamp": 1770482200.051031,
+    "log": "[EVENT] message.part.updated {part: Object, delta: pwd}"
+  },
+  {
+    "timestamp": 1770482200.051271,
+    "log": "[EVENT] message.part.updated {part: Object, delta: pwd}"
+  },
+  {
+    "timestamp": 1770482200.051824,
+    "log": "[EVENT] message.part.updated {part: Object, delta: `}"
+  },
+  {
+    "timestamp": 1770482200.0520692,
+    "log": "[EVENT] message.part.updated {part: Object, delta: `}"
+  },
+  {
+    "timestamp": 1770482200.052633,
+    "log": "[EVENT] message.part.updated {part: Object, delta:  }"
+  },
+  {
+    "timestamp": 1770482200.052844,
+    "log": "[EVENT] message.part.updated {part: Object, delta:  }"
+  },
+  {
+    "timestamp": 1770482200.053369,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u547d\u4ee4}"
+  },
+  {
+    "timestamp": 1770482200.053578,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u547d\u4ee4}"
+  },
+  {
+    "timestamp": 1770482200.054118,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6765}"
+  },
+  {
+    "timestamp": 1770482200.05433,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6765}"
+  },
+  {
+    "timestamp": 1770482200.054843,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u663e\u793a}"
+  },
+  {
+    "timestamp": 1770482200.055048,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u663e\u793a}"
+  },
+  {
+    "timestamp": 1770482200.055593,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5f53\u524d}"
+  },
+  {
+    "timestamp": 1770482200.0558422,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5f53\u524d}"
+  },
+  {
+    "timestamp": 1770482200.056363,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u76ee\u5f55}"
+  },
+  {
+    "timestamp": 1770482200.0565782,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u76ee\u5f55}"
+  },
+  {
+    "timestamp": 1770482200.0574038,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482200.057614,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482200.162315,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u8fd9\u662f\u4e00\u4e2a}"
+  },
+  {
+    "timestamp": 1770482200.162677,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u8fd9\u662f\u4e00\u4e2a}"
+  },
+  {
+    "timestamp": 1770482200.1633542,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7b80\u5355\u7684}"
+  },
+  {
+    "timestamp": 1770482200.164031,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7b80\u5355\u7684}"
+  },
+  {
+    "timestamp": 1770482200.165296,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u547d\u4ee4}"
+  },
+  {
+    "timestamp": 1770482200.165676,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u547d\u4ee4}"
+  },
+  {
+    "timestamp": 1770482200.1663628,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6267\u884c}"
+  },
+  {
+    "timestamp": 1770482200.167132,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6267\u884c}"
+  },
+  {
+    "timestamp": 1770482200.1685498,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u8bf7\u6c42}"
+  },
+  {
+    "timestamp": 1770482200.168832,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u8bf7\u6c42}"
+  },
+  {
+    "timestamp": 1770482200.1695108,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482200.169777,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482200.1704562,
+    "log": "[EVENT] message.part.updated {part: Object, delta: }"
+  },
+  {
+    "timestamp": 1770482200.17076,
+    "log": "[EVENT] message.part.updated {part: Object, delta: }"
+  },
+  {
+    "timestamp": 1770482200.171403,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.1716878,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.17248,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.172933,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.3939269,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.394563,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.399764,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.4001951,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.40139,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.401738,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.45157,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.451985,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482200.452707,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.452966,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.47171,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.4723132,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.472933,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482200.473983,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482200.474224,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.4747021,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.47856,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482200.478795,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482200.492796,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.49304,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.493321,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.493603,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482200.493831,
+    "log": "[EVENT] session.diff {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, diff: Array(0)}"
+  },
+  {
+    "timestamp": 1770482200.494047,
+    "log": "[EVENT] session.diff {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, diff: Array(0)}"
+  },
+  {
+    "timestamp": 1770482201.306939,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.3077161,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.310007,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u547d\u4ee4}"
+  },
+  {
+    "timestamp": 1770482201.3103302,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u547d\u4ee4}"
+  },
+  {
+    "timestamp": 1770482201.310955,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5df2}"
+  },
+  {
+    "timestamp": 1770482201.312495,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5df2}"
+  },
+  {
+    "timestamp": 1770482201.314141,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6267\u884c}"
+  },
+  {
+    "timestamp": 1770482201.315506,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6267\u884c}"
+  },
+  {
+    "timestamp": 1770482201.3164318,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \uff0c}"
+  },
+  {
+    "timestamp": 1770482201.3167849,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \uff0c}"
+  },
+  {
+    "timestamp": 1770482201.317415,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5f53\u524d}"
+  },
+  {
+    "timestamp": 1770482201.317653,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5f53\u524d}"
+  },
+  {
+    "timestamp": 1770482201.318254,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u76ee\u5f55}"
+  },
+  {
+    "timestamp": 1770482201.318492,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u76ee\u5f55}"
+  },
+  {
+    "timestamp": 1770482201.319059,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u662f}"
+  },
+  {
+    "timestamp": 1770482201.319286,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u662f}"
+  },
+  {
+    "timestamp": 1770482201.319911,
+    "log": "[EVENT] message.part.updated {part: Object, delta:  /}"
+  },
+  {
+    "timestamp": 1770482201.320138,
+    "log": "[EVENT] message.part.updated {part: Object, delta:  /}"
+  },
+  {
+    "timestamp": 1770482201.3207,
+    "log": "[EVENT] message.part.updated {part: Object, delta: Users}"
+  },
+  {
+    "timestamp": 1770482201.32093,
+    "log": "[EVENT] message.part.updated {part: Object, delta: Users}"
+  },
+  {
+    "timestamp": 1770482201.321557,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /y}"
+  },
+  {
+    "timestamp": 1770482201.3218079,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /y}"
+  },
+  {
+    "timestamp": 1770482201.322377,
+    "log": "[EVENT] message.part.updated {part: Object, delta: inyin}"
+  },
+  {
+    "timestamp": 1770482201.322609,
+    "log": "[EVENT] message.part.updated {part: Object, delta: inyin}"
+  },
+  {
+    "timestamp": 1770482201.3232682,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /code}"
+  },
+  {
+    "timestamp": 1770482201.3234901,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /code}"
+  },
+  {
+    "timestamp": 1770482201.3240352,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /op}"
+  },
+  {
+    "timestamp": 1770482201.3242838,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /op}"
+  },
+  {
+    "timestamp": 1770482201.3248389,
+    "log": "[EVENT] message.part.updated {part: Object, delta: encode}"
+  },
+  {
+    "timestamp": 1770482201.325052,
+    "log": "[EVENT] message.part.updated {part: Object, delta: encode}"
+  },
+  {
+    "timestamp": 1770482201.3256042,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -web}"
+  },
+  {
+    "timestamp": 1770482201.325821,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -web}"
+  },
+  {
+    "timestamp": 1770482201.3263412,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -client}"
+  },
+  {
+    "timestamp": 1770482201.3265579,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -client}"
+  },
+  {
+    "timestamp": 1770482201.327224,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482201.327446,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482201.45871,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6211\u9700\u8981}"
+  },
+  {
+    "timestamp": 1770482201.459172,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u6211\u9700\u8981}"
+  },
+  {
+    "timestamp": 1770482201.4601128,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7b80\u6d01}"
+  },
+  {
+    "timestamp": 1770482201.46045,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7b80\u6d01}"
+  },
+  {
+    "timestamp": 1770482201.461271,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5730}"
+  },
+  {
+    "timestamp": 1770482201.4616141,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u5730}"
+  },
+  {
+    "timestamp": 1770482201.462473,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u56de\u590d}"
+  },
+  {
+    "timestamp": 1770482201.462774,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u56de\u590d}"
+  },
+  {
+    "timestamp": 1770482201.464344,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7528\u6237}"
+  },
+  {
+    "timestamp": 1770482201.466879,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u7528\u6237}"
+  },
+  {
+    "timestamp": 1770482201.468725,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482201.4690392,
+    "log": "[EVENT] message.part.updated {part: Object, delta: \u3002}"
+  },
+  {
+    "timestamp": 1770482201.470054,
+    "log": "[EVENT] message.part.updated {part: Object, delta: }"
+  },
+  {
+    "timestamp": 1770482201.470937,
+    "log": "[EVENT] message.part.updated {part: Object, delta: }"
+  },
+  {
+    "timestamp": 1770482201.4721012,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.47242,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.473334,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /Users}"
+  },
+  {
+    "timestamp": 1770482201.47365,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /Users}"
+  },
+  {
+    "timestamp": 1770482201.474358,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /y}"
+  },
+  {
+    "timestamp": 1770482201.474619,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /y}"
+  },
+  {
+    "timestamp": 1770482201.475337,
+    "log": "[EVENT] message.part.updated {part: Object, delta: inyin}"
+  },
+  {
+    "timestamp": 1770482201.47561,
+    "log": "[EVENT] message.part.updated {part: Object, delta: inyin}"
+  },
+  {
+    "timestamp": 1770482201.476275,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /code}"
+  },
+  {
+    "timestamp": 1770482201.4765282,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /code}"
+  },
+  {
+    "timestamp": 1770482201.4771972,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /op}"
+  },
+  {
+    "timestamp": 1770482201.477453,
+    "log": "[EVENT] message.part.updated {part: Object, delta: /op}"
+  },
+  {
+    "timestamp": 1770482201.478085,
+    "log": "[EVENT] message.part.updated {part: Object, delta: encode}"
+  },
+  {
+    "timestamp": 1770482201.4783401,
+    "log": "[EVENT] message.part.updated {part: Object, delta: encode}"
+  },
+  {
+    "timestamp": 1770482201.478982,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -web}"
+  },
+  {
+    "timestamp": 1770482201.479228,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -web}"
+  },
+  {
+    "timestamp": 1770482201.479837,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -client}"
+  },
+  {
+    "timestamp": 1770482201.480112,
+    "log": "[EVENT] message.part.updated {part: Object, delta: -client}"
+  },
+  {
+    "timestamp": 1770482201.481456,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.481859,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.492836,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.493141,
+    "log": "[EVENT] message.part.updated {part: Object}"
+  },
+  {
+    "timestamp": 1770482201.493717,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.493948,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.512931,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.513963,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.515826,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482201.516462,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482201.518341,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482201.518613,
+    "log": "[EVENT] session.status {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, status: Object}"
+  },
+  {
+    "timestamp": 1770482201.51885,
+    "log": "[EVENT] session.idle {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ}"
+  },
+  {
+    "timestamp": 1770482201.519108,
+    "log": "[EVENT] session.idle {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ}"
+  },
+  {
+    "timestamp": 1770482201.5359628,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.536245,
+    "log": "[EVENT] message.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.536552,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.53677,
+    "log": "[EVENT] session.updated {info: Object}"
+  },
+  {
+    "timestamp": 1770482201.536978,
+    "log": "[EVENT] session.diff {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, diff: Array(0)}"
+  },
+  {
+    "timestamp": 1770482201.5371819,
+    "log": "[EVENT] session.diff {sessionID: ses_3c709af21ffeZ2xIekX1FqiZoQ, diff: Array(0)}"
+  }
+]

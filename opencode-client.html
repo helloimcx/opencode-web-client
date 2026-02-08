@@ -559,7 +559,7 @@
                 Object.entries(providerModels).forEach(([modelId, modelInfo]) => {
                     models.push({
                         value: `${providerID}:${modelId}`,
-                        label: `${providerID}:${modelId}`,
+                        label: modelId,
                         cost: modelInfo.cost?.input || 0
                     });
                 });
