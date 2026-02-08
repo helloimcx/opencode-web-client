@@ -575,14 +575,20 @@
             });
 
             // 优先选择 kimi k2.5 模型（付费版）
-            const kimiK25Model = models.find(m => m.value.includes('k2.5') && !m.value.includes('-free'));
+            const kimiK25Model = models.find(m => m.value.includes('k2p5') && !m.value.includes('-free'));
             if (kimiK25Model) {
                 modelSelect.value = kimiK25Model.value;
             } else {
-                // 备选：免费模型
-                const freeModel = models.find(m => m.cost === 0);
-                if (freeModel) {
-                    modelSelect.value = freeModel.value;
+                // 备选：k2.5 免费版
+                const kimiK25FreeModel = models.find(m => m.value.includes('k2.5') && m.value.includes('-free'));
+                if (kimiK25FreeModel) {
+                    modelSelect.value = kimiK25FreeModel.value;
+                } else {
+                    // 再次备选：其他免费模型
+                    const freeModel = models.find(m => m.cost === 0);
+                    if (freeModel) {
+                        modelSelect.value = freeModel.value;
+                    }
                 }
             }
         }
