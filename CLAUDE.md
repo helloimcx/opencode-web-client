@@ -19,21 +19,18 @@ python3 -m http.server 8000
 open http://localhost:8000/opencode-client.html
 ```
 
-### Background Service (Optional)
+### Using Scripts
 ```bash
-# Start in background
-nohup python3 -m http.server 8000 > /tmp/opencode-web.log 2>&1 &
-echo $! > /tmp/opencode-web.pid
-
-# Stop background service
-pkill -f "python3 -m http.server 8000"
+./start.sh    # Start server
+./stop.sh     # Stop server
+./restart.sh  # Restart server
 ```
 
 ### Testing
 ```bash
 # Run Playwright E2E tests
-python test_client.py
-python test_console.py
+python tests/test_client.py
+python tests/test_console.py
 ```
 
 ### Prerequisites
@@ -65,14 +62,39 @@ opencode
                                      └──────────────────────┘
 ```
 
+## Project Structure
+
+```
+js/                      # Modular JavaScript (ES6)
+├── main.js             # Application entry point
+├── app.js              # Main application logic
+├── state.js            # State management (singleton)
+├── logger.js           # Logging utilities
+├── utils.js            # Helper functions
+├── api.js              # OpenCode SDK interactions
+├── events.js           # SSE event handling
+├── parts.js            # Message part processing
+├── ui.js               # UI operations
+└── README.md           # Module documentation
+```
+
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `opencode-client.html` | Main single-page web client (all UI logic embedded) |
-| `test_client.py` | Playwright E2E test for the web client |
+| `opencode-client.html` | Main HTML structure with embedded CSS |
+| `js/main.js` | Application entry point |
+| `js/app.js` | Main business logic coordination |
+| `js/state.js` | Centralized state management |
+| `js/api.js` | OpenCode SDK API wrappers |
+| `js/events.js` | SSE event routing |
+| `js/parts.js` | Message part (text/reasoning/tool) rendering |
+| `js/ui.js` | DOM manipulation |
+| `tests/test_client.py` | Playwright E2E test |
+| `tests/test_console.py` | Console output test |
 | `docs/opencode-sdk.md` | SDK API reference |
-| `docs/opencode-sse-events.md` | SSE event structure documentation |
+| `docs/opencode-sse-events.md` | SSE event structure |
+| `docs/client-implementation.md` | Technical implementation details |
 
 ## SSE Event Handling
 
@@ -93,6 +115,35 @@ Events are filtered by `sessionID` to handle only the current session.
 | `step-start` / `step-finish` | Processing step boundaries |
 | `tool-call` | Tool invocation with `name`, `arguments`, `result` |
 
+## Module Communication
+
+Modules communicate through:
+1. **Direct imports** - Lower-level modules imported by upper-level modules
+2. **Custom events** - Decoupled communication via CustomEvent
+
+```javascript
+// Send event
+window.dispatchEvent(new CustomEvent('opencode:part:updated', { detail: partData }));
+
+// Listen to event
+window.addEventListener('opencode:part:updated', (e) => {
+    handlePartUpdated(e.detail);
+});
+```
+
+### Custom Events
+
+| Event Name | Triggered When | Data |
+|------------|----------------|------|
+| `opencode-event` | SSE raw event received | event object |
+| `opencode:message:created` | Message created | message object |
+| `opencode:message:updated` | Message updated | message object |
+| `opencode:part:updated` | Part updated | part object |
+| `opencode:session:status` | Session status changed | status object |
+| `opencode:processing:show` | Show processing indicator | null |
+| `opencode:processing:hide` | Hide processing indicator | null |
+| `opencode:reload:messages` | Reload messages | null |
+
 ## SDK Usage
 
 The SDK is imported from CDN:
@@ -112,25 +163,28 @@ const client = createOpencodeClient({
 | `client.session.create({ body })` | Create new session |
 | `client.session.messages({ path })` | Load session history |
 | `client.session.prompt({ path, body })` | Send message to AI |
+| `client.session.abort({ path })` | Stop current task |
 | `client.event.subscribe()` | Subscribe to SSE events |
 
 ## State Management
 
-- `localStorage.opencode_serverUrl` - Persisted server URL
-- `localStorage.opencode_sessionId` - Persisted session for reconnect
-- Session state restored on page load if available
-
-## No Build Process
-
-This is a static web application:
-- No package.json, npm, or bundlers
-- No TypeScript
-- Direct ES module imports from esm.sh
-- All CSS and JavaScript embedded in the single HTML file
+- **Centralized** - All state managed in `js/state.js` (singleton pattern)
+- **localStorage persistence**:
+  - `opencode_serverUrl` - Server URL
+  - `opencode_sessionId` - Current session ID
+- **State restored** on page load if available
 
 ## Important Notes
 
 1. **CORS**: OpenCode Server must allow cross-origin requests for the web client to work
 2. **Tool Execution**: All tools (file read/write, shell commands) execute on the **server**, not the client
-3. **Model Selection**: Default model is `opencode:minimax-m2.1-free` (free tier, no API key required)
-4. **Remote Deployment**: To deploy remotely, update `serverUrlInput.value` in HTML and ensure server listens on `0.0.0.0`
+3. **Model Selection**: Default model prioritizes `kimi:k2p5` (paid), falls back to `kimi:k2.5-free` (free tier)
+4. **Remote Deployment**: To deploy remotely, ensure server listens on `0.0.0.0`
+
+## No Build Process
+
+This is a static web application:
+- No package.json, npm, or bundlers required
+- No TypeScript
+- Direct ES module imports from esm.sh
+- Modular JavaScript in `js/` directory
