@@ -13,8 +13,28 @@
    npm install -g opencode-ai
 
    # 启动 Server
-   opencode
+   opencode serve
    ```
+
+   修改opencode配置文件 vi ~/.config/opencode/opencode.json
+   ```json
+   {
+        "$schema": "https://opencode.ai/config.json",
+        "mcp": {
+          "playwright": {
+                "type": "local",
+                "command": [
+                  "npx",
+                  "@playwright/mcp@latest"
+                ],
+                "enabled": true
+          }
+        },
+        "permission": "allow"
+  }
+   ```
+   修改完后需要重启opencode server
+
 
 2. **Python 3** - 用于启动 HTTP 服务器
    ```bash
